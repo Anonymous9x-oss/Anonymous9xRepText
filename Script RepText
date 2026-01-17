@@ -1,205 +1,208 @@
--- Anonymous9x RepText v1.0
--- GitHub Loadstring
+--// Anonymous9x RepText v2.0
+--// Improved UI + Draggable
+--// By Beb (Improved Version)
 
 local Players = game:GetService("Players")
+local UIS = game:GetService("UserInputService")
+local StarterGui = game:GetService("StarterGui")
 local player = Players.LocalPlayer
 
-if player.PlayerGui:FindFirstChild("Anonymous9xRepText") then
-    player.PlayerGui.Anonymous9xRepText:Destroy()
+-- Cleanup
+if player.PlayerGui:FindFirstChild("Anonymous9xRepTextV2") then
+	player.PlayerGui.Anonymous9xRepTextV2:Destroy()
 end
 
-local screenGui = Instance.new("ScreenGui")
-screenGui.Name = "Anonymous9xRepText"
-screenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
-screenGui.ResetOnSpawn = false
+-- ScreenGui
+local gui = Instance.new("ScreenGui")
+gui.Name = "Anonymous9xRepTextV2"
+gui.ResetOnSpawn = false
+gui.Parent = player.PlayerGui
 
-local mainFrame = Instance.new("Frame")
-mainFrame.Name = "MainFrame"
-mainFrame.Size = UDim2.new(0, 480, 0, 520)
-mainFrame.Position = UDim2.new(0.5, -240, 0.5, -260)
-mainFrame.BackgroundColor3 = Color3.fromRGB(15, 20, 30)
-mainFrame.BorderSizePixel = 0
-mainFrame.AnchorPoint = Vector2.new(0.5, 0.5)
-mainFrame.Parent = screenGui
+-- Main Frame
+local main = Instance.new("Frame")
+main.Size = UDim2.fromOffset(500, 560)
+main.Position = UDim2.fromScale(0.5, 0.5)
+main.AnchorPoint = Vector2.new(0.5, 0.5)
+main.BackgroundColor3 = Color3.fromRGB(18, 22, 35)
+main.BorderSizePixel = 0
+main.Parent = gui
 
-local corner = Instance.new("UICorner")
-corner.CornerRadius = UDim.new(0, 12)
-corner.Parent = mainFrame
+Instance.new("UICorner", main).CornerRadius = UDim.new(0, 14)
+
+-- Top Bar
+local top = Instance.new("Frame")
+top.Size = UDim2.new(1, 0, 0, 50)
+top.BackgroundColor3 = Color3.fromRGB(12, 16, 28)
+top.BorderSizePixel = 0
+top.Parent = main
+
+Instance.new("UICorner", top).CornerRadius = UDim.new(0, 14)
 
 local title = Instance.new("TextLabel")
-title.Size = UDim2.new(1, 0, 0, 50)
-title.BackgroundColor3 = Color3.fromRGB(10, 15, 25)
-title.Text = "🔐 ANONYMOUS9X REPTEXT"
-title.TextColor3 = Color3.fromRGB(220, 230, 255)
+title.Size = UDim2.new(1, -60, 1, 0)
+title.Position = UDim2.fromOffset(15, 0)
+title.BackgroundTransparency = 1
+title.Text = "🔐 ANONYMOUS9X REPORT GENERATOR"
 title.Font = Enum.Font.GothamBold
-title.TextSize = 20
-title.Parent = mainFrame
+title.TextSize = 18
+title.TextColor3 = Color3.fromRGB(220, 230, 255)
+title.TextXAlignment = Left
+title.Parent = top
 
-local titleCorner = Instance.new("UICorner")
-titleCorner.CornerRadius = UDim.new(0, 12, 0, 0)
-titleCorner.Parent = title
+local close = Instance.new("TextButton")
+close.Size = UDim2.fromOffset(34, 34)
+close.Position = UDim2.new(1, -44, 0, 8)
+close.BackgroundColor3 = Color3.fromRGB(190, 55, 55)
+close.Text = "X"
+close.Font = Enum.Font.GothamBold
+close.TextSize = 16
+close.TextColor3 = Color3.new(1,1,1)
+close.Parent = top
+Instance.new("UICorner", close).CornerRadius = UDim.new(0, 8)
 
-local closeBtn = Instance.new("TextButton")
-closeBtn.Size = UDim2.new(0, 35, 0, 35)
-closeBtn.Position = UDim2.new(1, -40, 0, 7)
-closeBtn.BackgroundColor3 = Color3.fromRGB(200, 50, 50)
-closeBtn.Text = "X"
-closeBtn.TextColor3 = Color3.new(1,1,1)
-closeBtn.Font = Enum.Font.GothamBold
-closeBtn.TextSize = 18
-closeBtn.Parent = title
-
-local closeCorner = Instance.new("UICorner")
-closeCorner.CornerRadius = UDim.new(0, 8)
-closeCorner.Parent = closeBtn
-
-local dropdown = Instance.new("TextButton")
-dropdown.Size = UDim2.new(0.9, 0, 0, 45)
-dropdown.Position = UDim2.new(0.05, 0, 0, 70)
-dropdown.BackgroundColor3 = Color3.fromRGB(30, 35, 50)
-dropdown.Text = "  ▼ Select Report Type"
-dropdown.TextColor3 = Color3.new(0.9,0.9,1)
-dropdown.Font = Enum.Font.Gotham
-dropdown.TextSize = 16
-dropdown.TextXAlignment = Enum.TextXAlignment.Left
-dropdown.Parent = mainFrame
-
-local dropCorner = Instance.new("UICorner")
-dropCorner.CornerRadius = UDim.new(0, 8)
-dropCorner.Parent = dropdown
-
-local optionsFrame = Instance.new("Frame")
-optionsFrame.Size = UDim2.new(0.9, 0, 0, 180)
-optionsFrame.Position = UDim2.new(0.05, 0, 0, 120)
-optionsFrame.BackgroundColor3 = Color3.fromRGB(25, 30, 45)
-optionsFrame.Visible = false
-optionsFrame.Parent = mainFrame
-
-local optionsCorner = Instance.new("UICorner")
-optionsCorner.CornerRadius = UDim.new(0, 8)
-optionsCorner.Parent = optionsFrame
-
-local scrolling = Instance.new("ScrollingFrame")
-scrolling.Size = UDim2.new(1, -10, 1, -10)
-scrolling.Position = UDim2.new(0, 5, 0, 5)
-scrolling.BackgroundTransparency = 1
-scrolling.ScrollBarThickness = 5
-scrolling.Parent = optionsFrame
-
-local listLayout = Instance.new("UIListLayout")
-listLayout.Padding = UDim.new(0, 5)
-listLayout.Parent = scrolling
-
-local reports = {
-    ["🚫 NSFW Avatar Bypass"] = "I'm reporting NSFW 'bypass' avatar items. This violates Roblox's Community Standards on Sexual Content.",
-    ["🔞 Sexualized Avatar"] = "Reporting a sexualized avatar with inappropriate appearances. This violates safety guidelines.",
-    ["🎭 Scamming & Fraud"] = "Reporting a scam/fraud promising free Robux or items. Violates Terms of Service.",
-    ["💢 Harassment & Hate Speech"] = "Reporting harassment, hate speech, bullying, or threats in chat/username.",
-    ["⚡ Exploiting & Cheating"] = "Reporting a player using exploits/cheats for unfair advantages.",
-    ["⚠️ Multiple Violations"] = "Reporting multiple violations: NSFW content, scamming, harassment, and exploiting."
-}
-
-for name, desc in pairs(reports) do
-    local btn = Instance.new("TextButton")
-    btn.Size = UDim2.new(1, -10, 0, 35)
-    btn.BackgroundColor3 = Color3.fromRGB(40, 45, 65)
-    btn.Text = "   " .. name
-    btn.TextColor3 = Color3.new(0.9,0.9,1)
-    btn.Font = Enum.Font.Gotham
-    btn.TextSize = 14
-    btn.TextXAlignment = Enum.TextXAlignment.Left
-    btn.Parent = scrolling
-    
-    local btnCorner = Instance.new("UICorner")
-    btnCorner.CornerRadius = UDim.new(0, 6)
-    btnCorner.Parent = btn
-    
-    btn.MouseButton1Click:Connect(function()
-        dropdown.Text = "  ✓ " .. name
-        textBox.Text = desc
-        optionsFrame.Visible = false
-    end)
+-- Draggable
+do
+	local dragging, dragStart, startPos
+	top.InputBegan:Connect(function(input)
+		if input.UserInputType == Enum.UserInputType.MouseButton1 then
+			dragging = true
+			dragStart = input.Position
+			startPos = main.Position
+		end
+	end)
+	UIS.InputChanged:Connect(function(input)
+		if dragging and input.UserInputType == Enum.UserInputType.MouseMovement then
+			local delta = input.Position - dragStart
+			main.Position = UDim2.new(
+				startPos.X.Scale,
+				startPos.X.Offset + delta.X,
+				startPos.Y.Scale,
+				startPos.Y.Offset + delta.Y
+			)
+		end
+	end)
+	UIS.InputEnded:Connect(function(input)
+		if input.UserInputType == Enum.UserInputType.MouseButton1 then
+			dragging = false
+		end
+	end)
 end
 
-local textBox = Instance.new("TextBox")
-textBox.Size = UDim2.new(0.9, 0, 0, 180)
-textBox.Position = UDim2.new(0.05, 0, 0, 310)
-textBox.BackgroundColor3 = Color3.fromRGB(20, 25, 40)
-textBox.TextColor3 = Color3.new(1,1,1)
-textBox.Font = Enum.Font.RobotoMono
-textBox.TextSize = 13
-textBox.TextWrapped = true
-textBox.Text = "Select report type above..."
-textBox.MultiLine = true
-textBox.Parent = mainFrame
+-- Dropdown Button
+local dropdown = Instance.new("TextButton")
+dropdown.Size = UDim2.new(0.9, 0, 0, 44)
+dropdown.Position = UDim2.fromOffset(25, 70)
+dropdown.BackgroundColor3 = Color3.fromRGB(35, 40, 60)
+dropdown.Text = "  ▼ Select Report Type"
+dropdown.Font = Enum.Font.Gotham
+dropdown.TextSize = 15
+dropdown.TextColor3 = Color3.fromRGB(230, 235, 255)
+dropdown.TextXAlignment = Left
+dropdown.Parent = main
+Instance.new("UICorner", dropdown).CornerRadius = UDim.new(0, 8)
 
-local textCorner = Instance.new("UICorner")
-textCorner.CornerRadius = UDim.new(0, 8)
-textCorner.Parent = textBox
+-- Options
+local optionFrame = Instance.new("Frame")
+optionFrame.Size = UDim2.new(0.9, 0, 0, 0)
+optionFrame.Position = dropdown.Position + UDim2.fromOffset(0, 48)
+optionFrame.BackgroundColor3 = Color3.fromRGB(28, 32, 50)
+optionFrame.ClipsDescendants = true
+optionFrame.Visible = false
+optionFrame.Parent = main
+Instance.new("UICorner", optionFrame).CornerRadius = UDim.new(0, 8)
 
-local copyBtn = Instance.new("TextButton")
-copyBtn.Size = UDim2.new(0.9, 0, 0, 50)
-copyBtn.Position = UDim2.new(0.05, 0, 0, 500)
-copyBtn.BackgroundColor3 = Color3.fromRGB(0, 120, 255)
-copyBtn.Text = "📋 COPY TEXT"
-copyBtn.TextColor3 = Color3.new(1,1,1)
-copyBtn.Font = Enum.Font.GothamBold
-copyBtn.TextSize = 18
-copyBtn.Parent = mainFrame
+local scroll = Instance.new("ScrollingFrame")
+scroll.Size = UDim2.new(1, -10, 1, -10)
+scroll.Position = UDim2.fromOffset(5, 5)
+scroll.CanvasSize = UDim2.new(0,0,0,0)
+scroll.ScrollBarThickness = 4
+scroll.BackgroundTransparency = 1
+scroll.Parent = optionFrame
 
-local copyCorner = Instance.new("UICorner")
-copyCorner.CornerRadius = UDim.new(0, 10)
-copyCorner.Parent = copyBtn
+local layout = Instance.new("UIListLayout", scroll)
+layout.Padding = UDim.new(0,6)
 
-local status = Instance.new("TextLabel")
-status.Size = UDim2.new(0.9, 0, 0, 25)
-status.Position = UDim2.new(0.05, 0, 0, 555)
-status.BackgroundTransparency = 1
-status.Text = "Status: Ready"
-status.TextColor3 = Color3.fromRGB(150, 200, 255)
-status.Font = Enum.Font.Gotham
-status.TextSize = 14
-status.TextXAlignment = Enum.TextXAlignment.Left
-status.Parent = mainFrame
+-- TextBox
+local box = Instance.new("TextBox")
+box.Size = UDim2.new(0.9, 0, 0, 200)
+box.Position = UDim2.fromOffset(25, 300)
+box.BackgroundColor3 = Color3.fromRGB(22, 26, 42)
+box.TextWrapped = true
+box.MultiLine = true
+box.ClearTextOnFocus = false
+box.Text = "Select report type above..."
+box.Font = Enum.Font.RobotoMono
+box.TextSize = 13
+box.TextColor3 = Color3.new(1,1,1)
+box.Parent = main
+Instance.new("UICorner", box).CornerRadius = UDim.new(0, 8)
+
+-- Copy Button
+local copy = Instance.new("TextButton")
+copy.Size = UDim2.new(0.9, 0, 0, 48)
+copy.Position = UDim2.fromOffset(25, 515)
+copy.BackgroundColor3 = Color3.fromRGB(0, 120, 255)
+copy.Text = "📋 COPY REPORT TEXT"
+copy.Font = Enum.Font.GothamBold
+copy.TextSize = 17
+copy.TextColor3 = Color3.new(1,1,1)
+copy.Parent = main
+Instance.new("UICorner", copy).CornerRadius = UDim.new(0, 10)
+
+-- Data
+local reports = {
+	["🚫 NSFW Avatar Bypass"] = "I am reporting NSFW bypass avatar items that violate Roblox Community Standards.",
+	["🔞 Sexualized Avatar"] = "This avatar contains sexualized content inappropriate for the platform.",
+	["🎭 Scamming / Fraud"] = "User is scamming players by promising Robux or items.",
+	["💢 Harassment / Hate"] = "Player is harassing or using hate speech in chat or username.",
+	["⚡ Exploiting"] = "Player is using exploits or cheats for unfair advantage.",
+	["⚠️ Multiple Violations"] = "Player is committing multiple violations including NSFW, scam, and harassment."
+}
+
+-- Populate
+for name, text in pairs(reports) do
+	local b = Instance.new("TextButton")
+	b.Size = UDim2.new(1, -10, 0, 36)
+	b.BackgroundColor3 = Color3.fromRGB(45, 50, 75)
+	b.Text = "  "..name
+	b.Font = Enum.Font.Gotham
+	b.TextSize = 14
+	b.TextColor3 = Color3.fromRGB(235, 240, 255)
+	b.TextXAlignment = Left
+	b.Parent = scroll
+	Instance.new("UICorner", b).CornerRadius = UDim.new(0,6)
+
+	b.MouseButton1Click:Connect(function()
+		dropdown.Text = "  ✓ "..name
+		box.Text = text
+		optionFrame.Visible = false
+	end)
+end
+
+layout:GetPropertyChangedSignal("AbsoluteContentSize"):Connect(function()
+	scroll.CanvasSize = UDim2.new(0,0,0,layout.AbsoluteContentSize.Y + 10)
+	optionFrame.Size = UDim2.new(0.9, 0, 0, math.clamp(layout.AbsoluteContentSize.Y + 10, 0, 180))
+end)
 
 dropdown.MouseButton1Click:Connect(function()
-    optionsFrame.Visible = not optionsFrame.Visible
+	optionFrame.Visible = not optionFrame.Visible
 end)
 
-copyBtn.MouseButton1Click:Connect(function()
-    if textBox.Text ~= "Select report type above..." then
-        if setclipboard then
-            setclipboard(textBox.Text)
-            copyBtn.Text = "✅ COPIED!"
-            copyBtn.BackgroundColor3 = Color3.fromRGB(50, 180, 80)
-            status.Text = "✓ Text copied! Paste in Roblox report form"
-            wait(1.5)
-            copyBtn.Text = "📋 COPY TEXT"
-            copyBtn.BackgroundColor3 = Color3.fromRGB(0, 120, 255)
-        else
-            textBox:CaptureFocus()
-            textBox:SelectAll()
-            status.Text = "⚠️ Select text (Ctrl+A) then Ctrl+C"
-        end
-    else
-        status.Text = "⚠️ Select report type first!"
-    end
+copy.MouseButton1Click:Connect(function()
+	if setclipboard then
+		setclipboard(box.Text)
+		copy.Text = "✅ COPIED!"
+		task.wait(1.2)
+		copy.Text = "📋 COPY REPORT TEXT"
+	end
 end)
 
-closeBtn.MouseButton1Click:Connect(function()
-    screenGui:Destroy()
+close.MouseButton1Click:Connect(function()
+	gui:Destroy()
 end)
 
-screenGui.Parent = player.PlayerGui
-
-game:GetService("StarterGui"):SetCore("SendNotification", {
-    Title = "Anonymous9x RepText",
-    Text = "Report Generator Loaded!",
-    Duration = 3
+StarterGui:SetCore("SendNotification",{
+	Title = "Anonymous9x RepText",
+	Text = "Loaded Successfully (v2)",
+	Duration = 3
 })
-
-print("========================================")
-print("Anonymous9x RepText v1.0 - GitHub Loaded")
-print("========================================")
-
-return "Anonymous9x RepText Loaded Successfully!"
