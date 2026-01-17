@@ -1,0 +1,205 @@
+-- Anonymous9x RepText v1.0
+-- GitHub Loadstring
+
+local Players = game:GetService("Players")
+local player = Players.LocalPlayer
+
+if player.PlayerGui:FindFirstChild("Anonymous9xRepText") then
+    player.PlayerGui.Anonymous9xRepText:Destroy()
+end
+
+local screenGui = Instance.new("ScreenGui")
+screenGui.Name = "Anonymous9xRepText"
+screenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+screenGui.ResetOnSpawn = false
+
+local mainFrame = Instance.new("Frame")
+mainFrame.Name = "MainFrame"
+mainFrame.Size = UDim2.new(0, 480, 0, 520)
+mainFrame.Position = UDim2.new(0.5, -240, 0.5, -260)
+mainFrame.BackgroundColor3 = Color3.fromRGB(15, 20, 30)
+mainFrame.BorderSizePixel = 0
+mainFrame.AnchorPoint = Vector2.new(0.5, 0.5)
+mainFrame.Parent = screenGui
+
+local corner = Instance.new("UICorner")
+corner.CornerRadius = UDim.new(0, 12)
+corner.Parent = mainFrame
+
+local title = Instance.new("TextLabel")
+title.Size = UDim2.new(1, 0, 0, 50)
+title.BackgroundColor3 = Color3.fromRGB(10, 15, 25)
+title.Text = "🔐 ANONYMOUS9X REPTEXT"
+title.TextColor3 = Color3.fromRGB(220, 230, 255)
+title.Font = Enum.Font.GothamBold
+title.TextSize = 20
+title.Parent = mainFrame
+
+local titleCorner = Instance.new("UICorner")
+titleCorner.CornerRadius = UDim.new(0, 12, 0, 0)
+titleCorner.Parent = title
+
+local closeBtn = Instance.new("TextButton")
+closeBtn.Size = UDim2.new(0, 35, 0, 35)
+closeBtn.Position = UDim2.new(1, -40, 0, 7)
+closeBtn.BackgroundColor3 = Color3.fromRGB(200, 50, 50)
+closeBtn.Text = "X"
+closeBtn.TextColor3 = Color3.new(1,1,1)
+closeBtn.Font = Enum.Font.GothamBold
+closeBtn.TextSize = 18
+closeBtn.Parent = title
+
+local closeCorner = Instance.new("UICorner")
+closeCorner.CornerRadius = UDim.new(0, 8)
+closeCorner.Parent = closeBtn
+
+local dropdown = Instance.new("TextButton")
+dropdown.Size = UDim2.new(0.9, 0, 0, 45)
+dropdown.Position = UDim2.new(0.05, 0, 0, 70)
+dropdown.BackgroundColor3 = Color3.fromRGB(30, 35, 50)
+dropdown.Text = "  ▼ Select Report Type"
+dropdown.TextColor3 = Color3.new(0.9,0.9,1)
+dropdown.Font = Enum.Font.Gotham
+dropdown.TextSize = 16
+dropdown.TextXAlignment = Enum.TextXAlignment.Left
+dropdown.Parent = mainFrame
+
+local dropCorner = Instance.new("UICorner")
+dropCorner.CornerRadius = UDim.new(0, 8)
+dropCorner.Parent = dropdown
+
+local optionsFrame = Instance.new("Frame")
+optionsFrame.Size = UDim2.new(0.9, 0, 0, 180)
+optionsFrame.Position = UDim2.new(0.05, 0, 0, 120)
+optionsFrame.BackgroundColor3 = Color3.fromRGB(25, 30, 45)
+optionsFrame.Visible = false
+optionsFrame.Parent = mainFrame
+
+local optionsCorner = Instance.new("UICorner")
+optionsCorner.CornerRadius = UDim.new(0, 8)
+optionsCorner.Parent = optionsFrame
+
+local scrolling = Instance.new("ScrollingFrame")
+scrolling.Size = UDim2.new(1, -10, 1, -10)
+scrolling.Position = UDim2.new(0, 5, 0, 5)
+scrolling.BackgroundTransparency = 1
+scrolling.ScrollBarThickness = 5
+scrolling.Parent = optionsFrame
+
+local listLayout = Instance.new("UIListLayout")
+listLayout.Padding = UDim.new(0, 5)
+listLayout.Parent = scrolling
+
+local reports = {
+    ["🚫 NSFW Avatar Bypass"] = "I'm reporting NSFW 'bypass' avatar items. This violates Roblox's Community Standards on Sexual Content.",
+    ["🔞 Sexualized Avatar"] = "Reporting a sexualized avatar with inappropriate appearances. This violates safety guidelines.",
+    ["🎭 Scamming & Fraud"] = "Reporting a scam/fraud promising free Robux or items. Violates Terms of Service.",
+    ["💢 Harassment & Hate Speech"] = "Reporting harassment, hate speech, bullying, or threats in chat/username.",
+    ["⚡ Exploiting & Cheating"] = "Reporting a player using exploits/cheats for unfair advantages.",
+    ["⚠️ Multiple Violations"] = "Reporting multiple violations: NSFW content, scamming, harassment, and exploiting."
+}
+
+for name, desc in pairs(reports) do
+    local btn = Instance.new("TextButton")
+    btn.Size = UDim2.new(1, -10, 0, 35)
+    btn.BackgroundColor3 = Color3.fromRGB(40, 45, 65)
+    btn.Text = "   " .. name
+    btn.TextColor3 = Color3.new(0.9,0.9,1)
+    btn.Font = Enum.Font.Gotham
+    btn.TextSize = 14
+    btn.TextXAlignment = Enum.TextXAlignment.Left
+    btn.Parent = scrolling
+    
+    local btnCorner = Instance.new("UICorner")
+    btnCorner.CornerRadius = UDim.new(0, 6)
+    btnCorner.Parent = btn
+    
+    btn.MouseButton1Click:Connect(function()
+        dropdown.Text = "  ✓ " .. name
+        textBox.Text = desc
+        optionsFrame.Visible = false
+    end)
+end
+
+local textBox = Instance.new("TextBox")
+textBox.Size = UDim2.new(0.9, 0, 0, 180)
+textBox.Position = UDim2.new(0.05, 0, 0, 310)
+textBox.BackgroundColor3 = Color3.fromRGB(20, 25, 40)
+textBox.TextColor3 = Color3.new(1,1,1)
+textBox.Font = Enum.Font.RobotoMono
+textBox.TextSize = 13
+textBox.TextWrapped = true
+textBox.Text = "Select report type above..."
+textBox.MultiLine = true
+textBox.Parent = mainFrame
+
+local textCorner = Instance.new("UICorner")
+textCorner.CornerRadius = UDim.new(0, 8)
+textCorner.Parent = textBox
+
+local copyBtn = Instance.new("TextButton")
+copyBtn.Size = UDim2.new(0.9, 0, 0, 50)
+copyBtn.Position = UDim2.new(0.05, 0, 0, 500)
+copyBtn.BackgroundColor3 = Color3.fromRGB(0, 120, 255)
+copyBtn.Text = "📋 COPY TEXT"
+copyBtn.TextColor3 = Color3.new(1,1,1)
+copyBtn.Font = Enum.Font.GothamBold
+copyBtn.TextSize = 18
+copyBtn.Parent = mainFrame
+
+local copyCorner = Instance.new("UICorner")
+copyCorner.CornerRadius = UDim.new(0, 10)
+copyCorner.Parent = copyBtn
+
+local status = Instance.new("TextLabel")
+status.Size = UDim2.new(0.9, 0, 0, 25)
+status.Position = UDim2.new(0.05, 0, 0, 555)
+status.BackgroundTransparency = 1
+status.Text = "Status: Ready"
+status.TextColor3 = Color3.fromRGB(150, 200, 255)
+status.Font = Enum.Font.Gotham
+status.TextSize = 14
+status.TextXAlignment = Enum.TextXAlignment.Left
+status.Parent = mainFrame
+
+dropdown.MouseButton1Click:Connect(function()
+    optionsFrame.Visible = not optionsFrame.Visible
+end)
+
+copyBtn.MouseButton1Click:Connect(function()
+    if textBox.Text ~= "Select report type above..." then
+        if setclipboard then
+            setclipboard(textBox.Text)
+            copyBtn.Text = "✅ COPIED!"
+            copyBtn.BackgroundColor3 = Color3.fromRGB(50, 180, 80)
+            status.Text = "✓ Text copied! Paste in Roblox report form"
+            wait(1.5)
+            copyBtn.Text = "📋 COPY TEXT"
+            copyBtn.BackgroundColor3 = Color3.fromRGB(0, 120, 255)
+        else
+            textBox:CaptureFocus()
+            textBox:SelectAll()
+            status.Text = "⚠️ Select text (Ctrl+A) then Ctrl+C"
+        end
+    else
+        status.Text = "⚠️ Select report type first!"
+    end
+end)
+
+closeBtn.MouseButton1Click:Connect(function()
+    screenGui:Destroy()
+end)
+
+screenGui.Parent = player.PlayerGui
+
+game:GetService("StarterGui"):SetCore("SendNotification", {
+    Title = "Anonymous9x RepText",
+    Text = "Report Generator Loaded!",
+    Duration = 3
+})
+
+print("========================================")
+print("Anonymous9x RepText v1.0 - GitHub Loaded")
+print("========================================")
+
+return "Anonymous9x RepText Loaded Successfully!"
